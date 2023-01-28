@@ -12,9 +12,9 @@
 # CPPFLAGS: Extra flags to give to the C preprocessor
 # LDFLAGS: Extra flags to give to the linker
 
-DEBUG = 1
-ENABLE_WARNINGS = 1
-WARNINGS_AS_ERRORS = 0
+DEBUG ?= 1
+ENABLE_WARNINGS ?= 1
+WARNINGS_AS_ERRORS ?= 0
 
 INCLUDE_DIR = include
 SOURCE_DIR = src
@@ -52,8 +52,10 @@ CXX_OBJECTS = $(patsubst $(SOURCE_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(CXX_SOURCES))
 # target: prerequisites
 # 		commands
 
+all: create build
+
 create:
-	mkdir -p build
+	@mkdir -p build
 
 build: create sources $(CXX_OBJECTS)
 	@echo "------------------------- Building ------------------------"
@@ -93,4 +95,4 @@ $(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 ###############################################
 # Phony
 # 
-.PHONY: create build sources execute clean
+.PHONY: all create build sources execute clean
