@@ -1,0 +1,52 @@
+# Variables
+# Note: Variables can only be strings
+# Note: single or double quotes for variables names or values have no meaning to Makefile
+
+# Predefined variables on Makefile. To see the predefined variable press "make -p" on terminal console
+# Some examples of predefined variables on Makefile
+#
+# CC: Program for compiling C programs; default gcc
+# CXX: Program for compiling C++ programs; default g++
+# CFLAGS: Extra flags to give to the C complier
+# CXXFLAGS: Extra flags to give to the C++ compiler
+# CPPFLAGS: Extra flags to give to the C preprocessor
+# LDFLAGS: Extra flags to give to the linker
+
+DEBUG = 1
+EXECUTABLE_NAME = main
+CXX_STANDARD = c++17
+CXX_WARNINGS = -Wall -Wextra -Wpedantic
+CXX = g++
+CXXFLAGS = $(CXX_WARNINGS) -std=$(CXX_STANDARD)
+LDFLAGS = -lm
+
+ifeq ($(DEBUG), 1)
+CXXFLAGS += -g -O0
+else
+CXXFLAGS += -O2
+endif
+
+COMPILER_CALL = $(CXX) $(CXXFLAGS)
+
+# target: prerequisites
+# 		commands
+
+build: clean my_lib.o main.o
+	@echo "------------------------- Building ------------------------"
+	$(COMPILER_CALL) main.o my_lib.o $(LDFLAGS) -o $(EXECUTABLE_NAME)
+	@echo ""
+	@echo "Done!"
+
+main.o:
+	$(COMPILER_CALL) main.cpp -c
+
+my_lib.o:
+	$(COMPILER_CALL) my_lib.cpp -c
+
+execute:
+	@echo "------------------ Executing the program -----------------"
+	@./$(EXECUTABLE_NAME)
+
+clean:
+	@echo "-------------------------- Clean -------------------------"
+	@rm -f main *.o
